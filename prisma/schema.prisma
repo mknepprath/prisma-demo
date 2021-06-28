@@ -1,0 +1,30 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Owner {
+  // Prisma will automatically create an ID for each entry for us
+  id   Int    @id @default(autoincrement())
+  name String
+  age  Int
+  // Each Owner can have multiple cars
+  Car  Car[]
+}
+
+model Car {
+  id      Int    @id @default(autoincrement())
+  make    String
+  model   String
+  year    Int
+  // Each Car can have only 1 owner
+  ownerId Int
+  owner   Owner  @relation(fields: [ownerId], references: [id])
+}
